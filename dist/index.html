@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F4EBDD">
+  <meta name="invitation-default-id" content="4">
+  <meta name="description" content="Свадебное приглашение среди облаков">
+  <title>Свадебное приглашение</title>
+  <link rel="preload" as="image" href="assets/intro-clouds.png">
+  <link rel="preload" as="image" href="assets/hero-doves.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="cloud-intro" id="cloudIntro" role="button" tabindex="0" aria-label="Открыть приглашение">
+    <video class="cloud-intro-panel" muted playsinline preload="auto" poster="assets/intro-clouds.png" aria-hidden="true">
+      <source src="assets/intro-clouds.mp4" type="video/mp4">
+    </video>
+    <span class="screen-reader-only">Открыть приглашение</span>
+  </div>
+
+  <span class="font-glyph-probe" aria-hidden="true">ң ө ү Ң Ө Ү</span>
+  <div class="data-status" id="dataStatus" role="status" aria-live="polite" hidden></div>
+
+  <main>
+    <header class="hero" id="top">
+      <div class="hero-backdrop" aria-hidden="true"></div>
+      <img class="hero-art" src="assets/hero-doves.png" alt="Два белых голубя среди светлых облаков и античной архитектуры">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-date" id="heroDate" aria-label="Дата проведения свадьбы">
+        <p data-i18n="invitationLabel">Приглашение на свадьбу</p>
+        <time id="heroDateTime" datetime="2027-06-12T16:00:00+06:00">
+          <span id="heroDay">12</span><i></i><span id="heroMonth">июня</span><i></i><span id="heroYear">2027</span>
+        </time>
+      </div>
+
+      <h1 class="hero-names" id="heroNames" aria-label="Имена молодожёнов">
+        <span id="groomName">Имя жениха</span>
+        <b data-i18n="and">и</b>
+        <span id="brideName">Имя невесты</span>
+      </h1>
+
+      <a class="scroll-hint" href="#welcome" data-i18n-aria="scrollToInvitation" aria-label="Перейти к приглашению"><span></span></a>
+    </header>
+
+    <section class="story" id="welcome">
+      <div class="floral-transition" aria-hidden="true"><img src="assets/floral-divider.png" alt=""></div>
+      <div class="story-inner reveal">
+        <p class="story-kicker" data-i18n="storyKicker">Дорогие родные и друзья</p>
+        <h2><span data-i18n="storyHeading">В нашей истории начинается</span><br><em data-i18n="storyAccent">новая глава</em></h2>
+        <div class="story-ornament" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+        <p class="story-copy" data-i18n="storyCopy">Есть моменты, которые хочется разделить с самыми близкими. Мы будем счастливы видеть вас рядом в день рождения нашей семьи.</p>
+        <p class="story-signature" data-i18n="storySignature">С любовью, наши семьи</p>
+      </div>
+    </section>
+
+    <section class="calendar-section" id="date">
+      <div class="calendar-shade" aria-hidden="true"></div>
+      <div class="calendar-card reveal">
+        <p class="calendar-kicker" data-i18n="saveTheDate">Сохраните эту дату</p>
+        <h2><span id="calendarDayLarge">12</span> <b class="calendar-heading-month" id="calendarHeadingMonth">июня</b> <em id="calendarYear">2027</em></h2>
+        <div class="calendar" id="calendar" aria-label="Календарь">
+          <div class="calendar-month"><i></i><strong id="calendarMonth">Июнь</strong><i></i></div>
+          <div class="calendar-week" id="calendarWeek" aria-hidden="true"></div>
+          <div class="calendar-days" id="calendarDays"></div>
+        </div>
+        <p class="calendar-note"><span id="calendarWeekday">Суббота</span><i>•</i><span id="weddingTime">16:00</span><i>•</i><span data-i18n="familyBirthday">День рождения нашей семьи</span></p>
+      </div>
+    </section>
+
+    <section class="program-section" id="program">
+      <header class="program-heading reveal">
+        <p data-i18n="programLabel">Программа дня</p>
+        <h2><span data-i18n="programHeading">Каждое мгновение</span><br><em data-i18n="programAccent">этого дня</em></h2>
+      </header>
+      <div class="program-timeline" id="programTimeline">
+        <div class="program-line" aria-hidden="true"></div>
+        <img class="falling-flower" id="fallingFlower" src="assets/falling-peony.png" alt="" aria-hidden="true">
+        <article class="program-event program-event--left reveal"><time datetime="15:00">15:00</time><h3>Встреча гостей</h3><p>Рады видеть вас на нашем празднике!</p></article>
+        <article class="program-event program-event--right reveal"><time datetime="16:00">16:00</time><h3>Церемония бракосочетания</h3><p>Разделите с нами самый трогательный момент.</p></article>
+        <article class="program-event program-event--left reveal"><time datetime="17:00">17:00</time><h3>Праздничный ужин</h3><p>Вкусные угощения и тёплая атмосфера.</p></article>
+        <article class="program-event program-event--right reveal"><time datetime="19:00">19:00</time><h3>Музыка и танцы</h3><p>Создадим незабываемые воспоминания.</p></article>
+        <article class="program-event program-event--left reveal"><time datetime="22:30">22:30</time><h3>Завершение вечера</h3><p>Спасибо, что стали частью нашего дня.</p></article>
+      </div>
+    </section>
+
+    <div class="venue-divider" aria-hidden="true"><img src="assets/program-venue-divider.png" alt=""></div>
+
+    <section class="venue-section" id="venue">
+      <div class="venue-inner reveal">
+        <p class="venue-kicker" data-i18n="venueKicker">Место встречи</p>
+        <h2 data-i18n="venueHeading">Локация</h2>
+        <div class="venue-rule" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+        <p class="venue-type" id="venueType">Ресторан</p>
+        <h3 id="venueName">Ала-Тоо</h3>
+        <address id="venueAddress">ул. Малдыбаева, 54/1</address>
+        <div class="venue-actions" data-i18n-aria="mapLinks" aria-label="Ссылки на карты">
+          <a class="venue-button venue-button--primary" id="googleMapsLink" href="#" target="_blank" rel="noopener noreferrer">Google Maps</a>
+          <a class="venue-button" id="twoGisLink" href="#" target="_blank" rel="noopener noreferrer">2ГИС</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="venue-rsvp-transition" aria-hidden="true"><img src="assets/venue-rsvp-frame.png" alt=""></div>
+
+    <section class="rsvp-section" id="rsvp">
+      <div class="rsvp-orbit rsvp-orbit--one" aria-hidden="true"></div>
+      <div class="rsvp-orbit rsvp-orbit--two" aria-hidden="true"></div>
+      <img class="rsvp-flower rsvp-flower--left" src="assets/falling-peony.png" alt="" aria-hidden="true">
+      <img class="rsvp-flower rsvp-flower--right" src="assets/falling-peony.png" alt="" aria-hidden="true">
+      <div class="rsvp-shell">
+        <header class="rsvp-heading reveal">
+          <p data-i18n="answerLabel">Ваш ответ</p>
+          <h2><span data-i18n="withUsFirst">Будете</span><br><em data-i18n="withUsSecond">с нами?</em></h2>
+          <div class="rsvp-ornament" aria-hidden="true"><i></i><span>♡</span><i></i></div>
+          <p class="rsvp-lead" data-i18n="rsvpLead">Пожалуйста, подтвердите присутствие — нам важно подготовить всё с заботой.</p>
+        </header>
+        <form class="rsvp-form reveal" id="rsvpForm">
+          <label class="rsvp-field"><span data-i18n="yourName">Ваше имя</span><input id="guestName" name="guestName" type="text" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Как к вам обращаться?" required minlength="2" maxlength="120"></label>
+          <fieldset class="rsvp-attendance">
+            <legend data-i18n="canAttend">Вы сможете прийти?</legend>
+            <label class="rsvp-choice"><input type="radio" name="attending" value="yes" checked><span><i></i><b data-i18n="willAttend">С радостью приду</b></span></label>
+            <label class="rsvp-choice"><input type="radio" name="attending" value="no"><span><i></i><b data-i18n="willNotAttend">К сожалению, не смогу</b></span></label>
+          </fieldset>
+          <label class="rsvp-field"><span data-i18n="guestCount">Количество гостей</span><select id="guestCount" name="guestCount"><option value="1" data-count="1">1 гость</option><option value="2" data-count="2">2 гостя</option><option value="3" data-count="3">3 гостя</option><option value="4" data-count="4">4 гостя</option><option value="5" data-count="5">5 гостей</option></select></label>
+          <label class="rsvp-field"><span data-i18n="wishLabel">Пожелание молодожёнам</span><textarea id="guestWish" name="guestWish" rows="3" maxlength="600" data-i18n-placeholder="wishPlaceholder" placeholder="Несколько тёплых слов…"></textarea></label>
+          <button class="rsvp-submit" id="rsvpSubmit" type="submit"><span data-i18n="sendAnswer">Отправить ответ</span><b>→</b></button>
+          <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
+          <div class="guest-list-preview"><button id="openGuestSheet" type="button" aria-haspopup="dialog"><span data-i18n="guestList">Список гостей</span><b>↗</b></button></div>
+        </form>
+      </div>
+    </section>
+
+    <section class="countdown-section" id="countdown">
+      <img class="countdown-art" src="assets/countdown-terrace.png" alt="Цветочная арка над светлой террасой с видом на озеро и горы">
+      <div class="countdown-glow" aria-hidden="true"></div>
+      <div class="countdown-content reveal">
+        <p class="countdown-kicker" data-i18n="countdownHeading">До нашей свадьбы осталось</p>
+        <div class="countdown-rule" aria-hidden="true"><i></i><span>♡</span><i></i></div>
+        <div class="countdown-timer" data-i18n-aria="countdownAria" aria-label="Обратный отсчёт до свадьбы">
+          <div><strong id="countdownDays">000</strong><span data-i18n="days">дней</span></div><b>:</b><div><strong id="countdownHours">00</strong><span data-i18n="hours">часов</span></div><b>:</b><div><strong id="countdownMinutes">00</strong><span data-i18n="minutes">минут</span></div><b>:</b><div><strong id="countdownSeconds">00</strong><span data-i18n="seconds">секунд</span></div>
+        </div>
+        <p class="countdown-signature"><small data-i18n="withLove">С любовью,</small><span id="countdownNames">Имя жениха и Имя невесты</span></p>
+      </div>
+    </section>
+  </main>
+
+  <div class="language-switcher" role="group" data-i18n-aria="languageChoice" aria-label="Выбор языка"><button type="button" data-language="ru" aria-pressed="true">RU</button><i></i><button type="button" data-language="ky" aria-pressed="false">KG</button></div>
+
+  <div class="guest-sheet-backdrop" id="guestSheetBackdrop" hidden>
+    <section class="guest-sheet" id="guestSheet" role="dialog" aria-modal="true" aria-labelledby="guestSheetTitle">
+      <div class="guest-sheet-handle" aria-hidden="true"></div>
+      <header><div><p data-i18n="responsesLabel">Ответы гостей</p><h2 id="guestSheetTitle" data-i18n="guestList">Список гостей</h2></div><button class="guest-sheet-close" id="closeGuestSheet" type="button" data-i18n-aria="close" aria-label="Закрыть">×</button></header>
+      <div class="guest-sheet-list" id="guestSheetList"></div>
+    </section>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
