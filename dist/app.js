@@ -167,6 +167,7 @@ function setupCloudIntro() {
     timers.add(timer);
     return timer;
   };
+  const hintTimer = later(() => intro.classList.add('has-tap-hint'), 4000);
 
   const releaseVideo = (video) => {
     video.pause();
@@ -199,6 +200,9 @@ function setupCloudIntro() {
   const open = () => {
     if (opening) return;
     opening = true;
+    window.clearTimeout(hintTimer);
+    timers.delete(hintTimer);
+    intro.classList.remove('has-tap-hint');
     intro.classList.add('is-opening');
     intro.setAttribute('aria-hidden', 'true');
     document.body.classList.add('site-ready');

@@ -29,6 +29,14 @@ body.intro-locked{height:100svh;overflow:hidden;touch-action:none}
 .cloud-intro-poster img{display:block}
 .cloud-intro-panel{z-index:1;opacity:0}
 .cloud-intro.is-playing .cloud-intro-panel{opacity:1}
+.cloud-intro-tap-hint{position:absolute;z-index:2;left:50%;top:50%;width:42px;height:42px;transform:translate(-50%,-50%) scale(.8);border:1px solid rgba(111,91,120,.38);border-radius:50%;opacity:0;pointer-events:none;transition:opacity .5s ease,transform .5s ease}
+.cloud-intro-tap-hint::before,.cloud-intro-tap-hint::after{content:"";position:absolute;inset:-1px;border:1px solid rgba(111,91,120,.25);border-radius:50%;animation:tap-ripple 2s ease-out infinite}
+.cloud-intro-tap-hint::after{animation-delay:1s}
+.cloud-intro-tap-hint i{position:absolute;left:50%;top:50%;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%;background:rgba(111,91,120,.55);animation:tap-dot 2s ease-in-out infinite}
+.cloud-intro.has-tap-hint .cloud-intro-tap-hint{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.cloud-intro.is-opening .cloud-intro-tap-hint{opacity:0}
+@keyframes tap-ripple{0%{transform:scale(.75);opacity:.7}70%,100%{transform:scale(1.65);opacity:0}}
+@keyframes tap-dot{0%,55%,100%{transform:translate(-50%,-50%) scale(1)}70%{transform:translate(-50%,-50%) scale(.65)}}
 .cloud-intro.is-opening{cursor:default;pointer-events:none}
 .cloud-intro.is-fading{opacity:0;transition:opacity 2s ease-in-out}
 .cloud-intro.is-finished{display:none}
@@ -457,6 +465,7 @@ html[lang="ky"] :is(.hero-names,.story-inner h2 em,.story-signature,.calendar-ca
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .cloud-intro.is-fading{transition-duration:.25s}
+  .cloud-intro-tap-hint::before,.cloud-intro-tap-hint::after,.cloud-intro-tap-hint i{animation:none}
   .hero-date,.hero-names span,.hero-names b,.scroll-hint span{animation:none}
   .reveal{opacity:1;transform:none;transition:none}
   .falling-flower{display:none}
