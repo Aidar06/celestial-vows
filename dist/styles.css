@@ -1,7 +1,7 @@
-@font-face{font-family:Cormorant;src:url('assets/fonts/cormorant-regular.ttf') format('truetype');font-style:normal;font-display:swap}
-@font-face{font-family:Cormorant;src:url('assets/fonts/cormorant-italic.ttf') format('truetype');font-style:italic;font-display:swap}
-@font-face{font-family:GreatVibes;src:url('assets/fonts/great-vibes.ttf') format('truetype');font-display:swap}
-@font-face{font-family:Manrope;src:url('assets/fonts/manrope-regular.ttf') format('truetype');font-display:swap}
+@font-face{font-family:Cormorant;src:url('assets/fonts/cormorant-regular.woff2') format('woff2');font-style:normal;font-display:swap}
+@font-face{font-family:Cormorant;src:url('assets/fonts/cormorant-italic.woff2') format('woff2');font-style:italic;font-display:swap}
+@font-face{font-family:GreatVibes;src:url('assets/fonts/great-vibes.woff2') format('woff2');font-display:swap}
+@font-face{font-family:Manrope;src:url('assets/fonts/manrope-regular.woff2') format('woff2');font-display:swap}
 
 :root{
   --ivory:#F4EBDD;
@@ -20,16 +20,21 @@ html[lang="ky"]{--script:Cormorant,Georgia,serif;--sans:Cormorant,Georgia,serif}
 *{box-sizing:border-box}
 html{max-width:100%;overflow-x:hidden;scroll-behavior:smooth;background:var(--ivory)}
 body{margin:0;overflow-x:hidden;background:var(--ivory);color:var(--plum);font-family:var(--serif)}
+body:not(.site-ready){font-family:Arial,sans-serif}
 body.sheet-open{overflow:hidden;touch-action:none}
 body.intro-locked{height:100svh;overflow:hidden;touch-action:none}
-.screen-reader-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.screen-reader-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;font-family:Arial,sans-serif}
 .cloud-intro{position:fixed;z-index:1000;inset:0;overflow:hidden;background:#F4EBDD;cursor:pointer;touch-action:manipulation;isolation:isolate;opacity:1}
-.cloud-intro-panel{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;user-select:none}
+.cloud-intro-poster,.cloud-intro-poster img,.cloud-intro-panel{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;pointer-events:none;user-select:none}
+.cloud-intro-poster img{display:block}
+.cloud-intro-panel{z-index:1;opacity:0}
+.cloud-intro.is-playing .cloud-intro-panel{opacity:1}
 .cloud-intro.is-opening{cursor:default;pointer-events:none}
 .cloud-intro.is-fading{opacity:0;transition:opacity 2s ease-in-out}
 .cloud-intro.is-finished{display:none}
-.font-glyph-probe{position:fixed;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;font-family:Cormorant;pointer-events:none}
+.font-glyph-probe{display:none;font-family:Cormorant}
 img{display:block;max-width:100%}
+body:not(.site-ready) main,body:not(.site-ready) .language-switcher,body:not(.site-ready) .data-status{display:none!important}
 
 .hero{
   position:relative;
@@ -43,11 +48,15 @@ img{display:block;max-width:100%}
   position:absolute;
   inset:-30px;
   z-index:-3;
-  background:url('assets/hero-doves.png') center/cover no-repeat;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
   filter:blur(25px) saturate(.75);
   transform:scale(1.08);
 }
-.hero-art{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:contain;object-position:center}
+.hero-picture{position:absolute;inset:0;z-index:-2}
+.hero-art{width:100%;height:100%;object-fit:contain;object-position:center}
+body.site-ready .hero-backdrop{background-image:url('assets/hero-doves.webp')}
 .hero-glow{
   position:absolute;
   inset:0;
@@ -145,7 +154,10 @@ img{display:block;max-width:100%}
   place-items:center;
   overflow:hidden;
   isolation:isolate;
-  background:var(--lavender) url('assets/calendar-hall.png') center/cover no-repeat;
+  background-color:var(--lavender);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
 }
 .calendar-section::before{
   content:"";
@@ -224,7 +236,7 @@ img{display:block;max-width:100%}
 .program-line{position:absolute;z-index:0;left:50%;top:20px;bottom:20px;width:1px;transform:translateX(-50%);background:linear-gradient(180deg,transparent,var(--champagne) 7%,var(--champagne) 93%,transparent)}
 .program-line::before,.program-line::after{content:"✦";position:absolute;left:50%;transform:translateX(-50%);color:var(--champagne);font-size:11px}
 .program-line::before{top:-8px}.program-line::after{bottom:-8px}
-.falling-flower{position:absolute;z-index:4;left:50%;top:0;width:clamp(72px,8vw,102px);max-width:none;transform:translate(-50%,0);filter:drop-shadow(0 12px 13px rgba(111,91,120,.2));pointer-events:none;will-change:transform}
+.falling-flower{position:absolute;z-index:4;left:50%;top:0;width:clamp(72px,8vw,102px);height:auto;max-width:none;transform:translate(-50%,0);filter:drop-shadow(0 12px 13px rgba(111,91,120,.2));pointer-events:none;will-change:transform}
 .program-event{position:relative;width:calc(50% - 76px);padding:15px 12px 18px;background:none;border:0}
 .program-event::after{content:"✦";position:absolute;top:31px;width:47px;color:var(--champagne);font:400 10px/1 var(--serif);text-align:center}
 .program-event--left{margin-right:auto;text-align:right}

@@ -6,16 +6,19 @@
   <meta name="theme-color" content="#F4EBDD">
   <meta name="invitation-default-id" content="4">
   <meta name="description" content="Свадебное приглашение среди облаков">
+  <link rel="icon" href="data:,">
   <title>Свадебное приглашение</title>
-  <link rel="preload" as="image" href="assets/intro-clouds.png">
-  <link rel="preload" as="image" href="assets/hero-doves.png">
+  <link rel="preload" as="image" href="assets/intro-clouds-640.webp" type="image/webp" media="(max-width: 700px)">
+  <link rel="preload" as="image" href="assets/intro-clouds.webp" type="image/webp" media="(min-width: 701px)">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="cloud-intro" id="cloudIntro" role="button" tabindex="0" aria-label="Открыть приглашение">
-    <video class="cloud-intro-panel" muted playsinline preload="auto" poster="assets/intro-clouds.png" aria-hidden="true">
-      <source src="assets/intro-clouds.mp4" type="video/mp4">
-    </video>
+    <picture class="cloud-intro-poster" aria-hidden="true">
+      <source media="(max-width: 700px)" srcset="assets/intro-clouds-640.webp">
+      <img src="assets/intro-clouds.webp" width="941" height="1671" alt="" fetchpriority="high">
+    </picture>
+    <video class="cloud-intro-panel" muted playsinline preload="none" data-src="assets/intro-clouds.mp4" aria-hidden="true"></video>
     <span class="screen-reader-only">Открыть приглашение</span>
   </div>
 
@@ -25,7 +28,10 @@
   <main>
     <header class="hero" id="top">
       <div class="hero-backdrop" aria-hidden="true"></div>
-      <img class="hero-art" src="assets/hero-doves.png" alt="Два белых голубя среди светлых облаков и античной архитектуры">
+      <picture class="hero-picture">
+        <source media="(max-width: 800px)" data-srcset="assets/hero-doves-768.webp">
+        <img class="hero-art" data-src="assets/hero-doves.webp" width="941" height="1672" alt="Два белых голубя среди светлых облаков и античной архитектуры" decoding="async">
+      </picture>
       <div class="hero-glow" aria-hidden="true"></div>
 
       <div class="hero-date" id="heroDate" aria-label="Дата проведения свадьбы">
@@ -45,7 +51,7 @@
     </header>
 
     <section class="story" id="welcome">
-      <div class="floral-transition" aria-hidden="true"><img src="assets/floral-divider.png" alt=""></div>
+      <div class="floral-transition" aria-hidden="true"><img data-src="assets/floral-divider.webp" width="2048" height="768" alt="" loading="lazy" decoding="async"></div>
       <div class="story-inner reveal">
         <p class="story-kicker" data-i18n="storyKicker">Дорогие родные и друзья</p>
         <h2><span data-i18n="storyHeading">В нашей истории начинается</span><br><em data-i18n="storyAccent">новая глава</em></h2>
@@ -55,7 +61,7 @@
       </div>
     </section>
 
-    <section class="calendar-section" id="date">
+    <section class="calendar-section deferred-background" id="date" data-background-image="assets/calendar-hall.webp">
       <div class="calendar-shade" aria-hidden="true"></div>
       <div class="calendar-card reveal">
         <p class="calendar-kicker" data-i18n="saveTheDate">Сохраните эту дату</p>
@@ -76,7 +82,7 @@
       </header>
       <div class="program-timeline" id="programTimeline">
         <div class="program-line" aria-hidden="true"></div>
-        <img class="falling-flower" id="fallingFlower" src="assets/falling-peony.png" alt="" aria-hidden="true">
+        <img class="falling-flower" id="fallingFlower" data-src="assets/falling-peony.webp" width="820" height="675" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <article class="program-event program-event--left reveal"><time datetime="15:00">15:00</time><h3>Встреча гостей</h3><p>Рады видеть вас на нашем празднике!</p></article>
         <article class="program-event program-event--right reveal"><time datetime="16:00">16:00</time><h3>Церемония бракосочетания</h3><p>Разделите с нами самый трогательный момент.</p></article>
         <article class="program-event program-event--left reveal"><time datetime="17:00">17:00</time><h3>Праздничный ужин</h3><p>Вкусные угощения и тёплая атмосфера.</p></article>
@@ -85,7 +91,7 @@
       </div>
     </section>
 
-    <div class="venue-divider" aria-hidden="true"><img src="assets/program-venue-divider.png" alt=""></div>
+    <div class="venue-divider" aria-hidden="true"><img data-src="assets/program-venue-divider.webp" width="2172" height="724" alt="" loading="lazy" decoding="async"></div>
 
     <section class="venue-section" id="venue">
       <div class="venue-inner reveal">
@@ -102,13 +108,13 @@
       </div>
     </section>
 
-    <div class="venue-rsvp-transition" aria-hidden="true"><img src="assets/venue-rsvp-frame.png" alt=""></div>
+    <div class="venue-rsvp-transition" aria-hidden="true"><img data-src="assets/venue-rsvp-frame.webp" width="1024" height="1536" alt="" loading="lazy" decoding="async"></div>
 
     <section class="rsvp-section" id="rsvp">
       <div class="rsvp-orbit rsvp-orbit--one" aria-hidden="true"></div>
       <div class="rsvp-orbit rsvp-orbit--two" aria-hidden="true"></div>
-      <img class="rsvp-flower rsvp-flower--left" src="assets/falling-peony.png" alt="" aria-hidden="true">
-      <img class="rsvp-flower rsvp-flower--right" src="assets/falling-peony.png" alt="" aria-hidden="true">
+      <img class="rsvp-flower rsvp-flower--left" data-src="assets/falling-peony.webp" width="820" height="675" alt="" aria-hidden="true" loading="lazy" decoding="async">
+      <img class="rsvp-flower rsvp-flower--right" data-src="assets/falling-peony.webp" width="820" height="675" alt="" aria-hidden="true" loading="lazy" decoding="async">
       <div class="rsvp-shell">
         <header class="rsvp-heading reveal">
           <p data-i18n="answerLabel">Ваш ответ</p>
@@ -133,7 +139,7 @@
     </section>
 
     <section class="countdown-section" id="countdown">
-      <img class="countdown-art" src="assets/countdown-terrace.png" alt="Цветочная арка над светлой террасой с видом на озеро и горы">
+      <img class="countdown-art" data-src="assets/countdown-terrace.webp" width="1024" height="1536" alt="Цветочная арка над светлой террасой с видом на озеро и горы" loading="lazy" decoding="async">
       <div class="countdown-glow" aria-hidden="true"></div>
       <div class="countdown-content reveal">
         <p class="countdown-kicker" data-i18n="countdownHeading">До нашей свадьбы осталось</p>

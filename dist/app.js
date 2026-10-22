@@ -96,16 +96,104 @@ const elements = {
   countdownDays: document.querySelector('#countdownDays'), countdownHours: document.querySelector('#countdownHours'), countdownMinutes: document.querySelector('#countdownMinutes'), countdownSeconds: document.querySelector('#countdownSeconds'), countdownNames: document.querySelector('#countdownNames')
 };
 
+function activateHeroMedia() {
+  const picture = document.querySelector('.hero-picture');
+  if (!picture || picture.dataset.loaded === 'true') return;
+  picture.querySelectorAll('source[data-srcset]').forEach((source) => {
+    source.srcset = source.dataset.srcset;
+    delete source.dataset.srcset;
+  });
+  const image = picture.querySelector('img[data-src]');
+  if (image) {
+    image.fetchPriority = 'high';
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+  }
+  picture.dataset.loaded = 'true';
+}
+
+function setupDeferredBackgrounds() {
+  const nodes = [...document.querySelectorAll('.deferred-background[data-background-image]')];
+  const load = (node) => {
+    node.style.backgroundImage = `url("${node.dataset.backgroundImage}")`;
+    delete node.dataset.backgroundImage;
+    node.classList.remove('deferred-background');
+  };
+  if (!('IntersectionObserver' in window)) {
+    nodes.forEach(load);
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      load(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '600px 0px' });
+  nodes.forEach((node) => observer.observe(node));
+}
+
+function setupDeferredImages() {
+  const nodes = [...document.querySelectorAll('img[data-src]:not(.hero-art)')];
+  const load = (image) => {
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+  };
+  if (!('IntersectionObserver' in window)) {
+    nodes.forEach(load);
+    return;
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      load(entry.target);
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '500px 0px' });
+  nodes.forEach((node) => observer.observe(node));
+}
+
 function setupCloudIntro() {
   const intro = elements.cloudIntro;
   if (!intro) return;
   document.body.classList.add('intro-locked');
   let opening = false;
+  const timers = new Set();
+  const later = (callback, delay) => {
+    const timer = window.setTimeout(() => {
+      timers.delete(timer);
+      callback();
+    }, delay);
+    timers.add(timer);
+    return timer;
+  };
+
+  const releaseVideo = (video) => {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    video.remove();
+  };
 
   const finish = () => {
+    timers.forEach(window.clearTimeout);
+    timers.clear();
     intro.classList.add('is-finished');
     document.body.classList.remove('intro-locked');
-    elements.cloudIntroVideos.forEach((video) => video.pause());
+    elements.cloudIntroVideos.forEach(releaseVideo);
+  };
+
+  const startFadeSequence = () => {
+    if (intro.dataset.sequenceStarted === 'true') return;
+    intro.dataset.sequenceStarted = 'true';
+    intro.classList.add('is-playing');
+    later(() => intro.classList.add('is-fading'), 3000);
+    later(finish, 5050);
+  };
+
+  const gracefulFallback = () => {
+    intro.classList.add('is-fading');
+    later(finish, reducedMotion ? 280 : 2050);
   };
 
   const open = () => {
@@ -113,17 +201,25 @@ function setupCloudIntro() {
     opening = true;
     intro.classList.add('is-opening');
     intro.setAttribute('aria-hidden', 'true');
-    elements.cloudIntroVideos.forEach((video) => {
-      video.currentTime = 0;
-      video.play().catch(() => {});
-    });
+    document.body.classList.add('site-ready');
+    activateHeroMedia();
+    setupDeferredImages();
+    setupDeferredBackgrounds();
     if (reducedMotion) {
       intro.classList.add('is-fading');
-      window.setTimeout(finish, 280);
+      later(finish, 280);
       return;
     }
-    window.setTimeout(() => intro.classList.add('is-fading'), 3000);
-    window.setTimeout(finish, 5050);
+    const video = elements.cloudIntroVideos[0];
+    if (!video?.dataset.src) {
+      gracefulFallback();
+      return;
+    }
+    video.addEventListener('playing', startFadeSequence, { once: true });
+    video.addEventListener('error', gracefulFallback, { once: true });
+    video.src = video.dataset.src;
+    video.currentTime = 0;
+    video.play().catch(gracefulFallback);
   };
 
   intro.addEventListener('click', open, { once: true });
