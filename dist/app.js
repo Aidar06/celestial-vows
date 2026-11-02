@@ -95,7 +95,7 @@ const elements = {
   venueType: document.querySelector('#venueType'), venueName: document.querySelector('#venueName'), venueAddress: document.querySelector('#venueAddress'), venueActions:document.querySelector('.venue-actions'),googleMapsLink: document.querySelector('#googleMapsLink'), twoGisLink: document.querySelector('#twoGisLink'),
   rsvpForm: document.querySelector('#rsvpForm'), rsvpSubmit: document.querySelector('#rsvpSubmit'), rsvpSubmitText: document.querySelector('#rsvpSubmit span'), rsvpStatus: document.querySelector('#rsvpStatus'),
   guestName: document.querySelector('#guestName'), guestCount: document.querySelector('#guestCount'), guestWish: document.querySelector('#guestWish'),
-  countdownDays: document.querySelector('#countdownDays'), countdownHours: document.querySelector('#countdownHours'), countdownMinutes: document.querySelector('#countdownMinutes'), countdownSeconds: document.querySelector('#countdownSeconds'), countdownNames: document.querySelector('#countdownNames'),musicToggle:document.querySelector('#musicToggle'),backgroundMusic:document.querySelector('#backgroundMusic'),guestWishField:document.querySelector('#guestWishField'),rsvpSection:document.querySelector('#rsvp')
+  countdownDays: document.querySelector('#countdownDays'), countdownHours: document.querySelector('#countdownHours'), countdownMinutes: document.querySelector('#countdownMinutes'), countdownSeconds: document.querySelector('#countdownSeconds'), countdownNames: document.querySelector('#countdownNames'),guestWishField:document.querySelector('#guestWishField'),rsvpSection:document.querySelector('#rsvp')
 };
 
 function activateHeroMedia() {
@@ -272,6 +272,7 @@ function applyStaticTranslations() {
   document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.placeholder = translate(node.dataset.i18nPlaceholder); });
   document.querySelectorAll('[data-i18n-aria]').forEach((node) => { node.setAttribute('aria-label', translate(node.dataset.i18nAria)); });
   document.querySelectorAll('[data-language]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.language === state.language)));
+  document.querySelector('.language-menu__current').textContent=state.language==='ky'?'KG':state.language==='kk'?'KZ':'RU';
   document.querySelectorAll('#guestCount option').forEach((option) => { option.textContent = guestCountLabel(option.dataset.count); });
   if (state.isSubmitting) elements.rsvpSubmitText.textContent = translate('sending');
   if (state.rsvpStatusKey) elements.rsvpStatus.textContent = translate(state.rsvpStatusKey);
@@ -383,7 +384,7 @@ function renderInvitation(invitation) {
   const invite=invitation.invitation[state.language]||invitation.invitation[invitation.languages.default]||invitation.invitation.ru||{};
   elements.storyKicker.textContent=invite.title||translate('storyKicker');elements.storyCopy.textContent=invite.text||translate('storyCopy');
   const wish=invitation.wishBlock.content[state.language]||invitation.wishBlock.content[invitation.languages.default]||{};elements.wishBlock.hidden=!invitation.wishBlock.enabled;if(!elements.wishBlock.hidden){elements.wishBlockTitle.textContent=wish.title||'';elements.wishBlockText.textContent=wish.text||''}
-  elements.rsvpSection.hidden=!invitation.rsvp.enabled;elements.guestWishField.hidden=!invitation.rsvp.allowGuestWish;configureGuestCount(invitation.rsvp.maxGuests);configureMusic(invitation.music);
+  elements.rsvpSection.hidden=!invitation.rsvp.enabled;elements.guestWishField.hidden=!invitation.rsvp.allowGuestWish;configureGuestCount(invitation.rsvp.maxGuests);
   renderDate(invitation);
   renderProgram(invitation);
   renderVenue(invitation);
@@ -392,8 +393,6 @@ function renderInvitation(invitation) {
 }
 
 function configureGuestCount(max){elements.guestCount.replaceChildren(...Array.from({length:max},(_,index)=>{const option=document.createElement('option');option.value=String(index+1);option.dataset.count=String(index+1);option.textContent=guestCountLabel(index+1);return option}))}
-function configureMusic(music={}){elements.musicToggle.hidden=!(music.enabled&&music.url);if(elements.musicToggle.hidden){elements.backgroundMusic.pause();return}const url=new URL(music.url,location.href).href;if(elements.backgroundMusic.src!==url)elements.backgroundMusic.src=music.url;elements.backgroundMusic.volume=Math.max(0,Math.min(1,Number(music.volume)||.6))}
-
 function setLanguage(language, persist = true) {
   if (!state.invitation?.languages.enabled.includes(language)&&state.invitation) return;
   if (!['ru', 'ky','kk'].includes(language)) return;
@@ -403,7 +402,10 @@ function setLanguage(language, persist = true) {
   if (state.invitation) renderInvitation(state.invitation);
 }
 
-document.querySelectorAll('[data-language]').forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.language)));
+const languageMenu=document.querySelector('.language-menu'),languageMenuToggle=document.querySelector('.language-menu__toggle');
+languageMenuToggle.addEventListener('click',()=>{const open=languageMenu.classList.toggle('is-open');languageMenuToggle.setAttribute('aria-expanded',String(open))});
+document.addEventListener('click',event=>{if(!languageMenu.contains(event.target)){languageMenu.classList.remove('is-open');languageMenuToggle.setAttribute('aria-expanded','false')}});
+document.querySelectorAll('[data-language]').forEach((button) => button.addEventListener('click', () => {setLanguage(button.dataset.language);languageMenu.classList.remove('is-open');languageMenuToggle.setAttribute('aria-expanded','false')}));
 
 let revealObserver;
 function prepareReveal(root = document) {
@@ -504,10 +506,9 @@ async function loadInvitation() {
     }
   }
   document.body.dataset.dataSource = state.source;
-  const invitation=normalizeInvitation(state.raw,state.id);const enabled=invitation.languages.enabled;if(!enabled.includes(state.language))state.language=invitation.languages.default;document.querySelectorAll('[data-language]').forEach(button=>button.hidden=!enabled.includes(button.dataset.language));document.querySelector('.language-switcher').hidden=enabled.length<2;applyStaticTranslations();renderInvitation(invitation);
+  const invitation=normalizeInvitation(state.raw,state.id);const enabled=invitation.languages.enabled;if(!enabled.includes(state.language))state.language=invitation.languages.default;document.querySelectorAll('[data-language]').forEach(button=>button.hidden=!enabled.includes(button.dataset.language));document.querySelector('.language-menu').hidden=enabled.length<2;applyStaticTranslations();renderInvitation(invitation);
 }
 
-elements.musicToggle.addEventListener('click',async()=>{if(elements.backgroundMusic.paused){try{await elements.backgroundMusic.play()}catch{}}else elements.backgroundMusic.pause();elements.musicToggle.classList.toggle('is-playing',!elements.backgroundMusic.paused)});
 document.body.classList.add('site-ready');activateHeroMedia();setupDeferredImages();setupDeferredBackgrounds();
 applyStaticTranslations();
 prepareReveal();

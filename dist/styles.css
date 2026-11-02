@@ -42,7 +42,7 @@ body.intro-locked{height:100svh;overflow:hidden;touch-action:none}
 .cloud-intro.is-finished{display:none}
 .font-glyph-probe{display:none;font-family:Cormorant}
 img{display:block;max-width:100%}
-body:not(.site-ready) main,body:not(.site-ready) .language-switcher,body:not(.site-ready) .data-status{display:none!important}
+body:not(.site-ready) main,body:not(.site-ready) .language-menu,body:not(.site-ready) .data-status{display:none!important}
 
 .hero{
   position:relative;
@@ -471,3 +471,10 @@ html[lang="ky"] :is(.hero-names,.story-inner h2 em,.story-signature,.calendar-ca
   .falling-flower{display:none}
 }
 .api-music-toggle{position:fixed;z-index:92;left:18px;bottom:18px;width:44px;height:44px;border:1px solid #a9907355;border-radius:50%;background:#fffaf2dd;color:#8d7358;font-size:19px;backdrop-filter:blur(10px)}.api-music-toggle.is-playing{color:#c69e68}.api-wish-block{min-height:460px;display:grid;place-items:center}.api-wish-block[hidden]{display:none}
+.language-menu{position:fixed;right:calc(10px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));z-index:75;display:flex;flex-direction:row-reverse;align-items:center;gap:7px}
+.language-menu[hidden],.language-menu__panel button[hidden]{display:none!important}
+.language-menu__toggle{width:46px;height:46px;border:1px solid rgba(244,235,221,.46);border-radius:50%;background:rgba(111,91,120,.88);color:#fff9ef;box-shadow:0 10px 28px rgba(52,35,58,.18);font:500 10px var(--sans);letter-spacing:.08em;backdrop-filter:blur(10px)}
+.language-menu__panel{display:flex;align-items:center;gap:3px;max-width:0;padding:0;overflow:hidden;opacity:0;pointer-events:none;transform:translateX(10px);border:1px solid transparent;border-radius:17px;background:rgba(111,91,120,.9);box-shadow:0 10px 28px rgba(52,35,58,.16);transition:max-width .32s ease,padding .32s ease,opacity .22s ease,transform .32s ease}
+.language-menu.is-open .language-menu__panel{max-width:190px;padding:5px;opacity:1;pointer-events:auto;transform:none;border-color:rgba(244,235,221,.38)}
+.language-menu__panel button{min-width:42px;height:34px;padding:0 8px;border:0;border-radius:12px;background:transparent;color:rgba(255,249,239,.6);font:500 10px var(--sans)}
+.language-menu__panel button[aria-pressed="true"]{background:rgba(255,249,239,.16);color:#fff9ef}
