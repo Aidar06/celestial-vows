@@ -50,6 +50,7 @@ const UI = {
     metaTitle: 'Үйлөнүү тоюна чакыруу', metaDescription: 'Үйлөнүү тоюна чакыруу', calendar: 'Жылнаама', weddingDay: 'үйлөнүү күнү'
   }
 };
+UI.kk={...UI.ru,invitationLabel:'Үйлену тойына шақыру',and:'және',scrollToInvitation:'Шақыруға өту',storyKicker:'Құрметті туыстар мен достар',storyHeading:'Біздің тарихымызда',storyAccent:'жаңа тарау басталады',storySignature:'Сүйіспеншілікпен, біздің отбасыларымыз',saveTheDate:'Осы күнді сақтаңыз',familyBirthday:'Отбасымыздың туған күні',programLabel:'Күн бағдарламасы',programHeading:'Осы күннің әрбір',programAccent:'сәті',venueKicker:'Кездесу орны',venueHeading:'Мекенжай',mapLinks:'Карта сілтемелері',answerLabel:'Сіздің жауабыңыз',withUsFirst:'Бізбен бірге',withUsSecond:'боласыз ба?',rsvpLead:'Қатысатыныңызды растаңыз — мерекені қамқорлықпен дайындағымыз келеді.',yourName:'Сіздің атыңыз',namePlaceholder:'Сізге қалай жүгінеміз?',canAttend:'Келе аласыз ба?',willAttend:'Қуана келемін',willNotAttend:'Өкінішке қарай, келе алмаймын',guestCount:'Қонақтар саны',wishLabel:'Жас жұбайларға тілек',wishPlaceholder:'Бірнеше жылы сөз…',sendAnswer:'Жауапты жіберу',sending:'Жіберілуде…',submitSuccess:'Рақмет! Жауабыңыз жіберілді.',submitError:'Жауап жіберілмеді. Қайталап көріңіз.',languageChoice:'Тілді таңдау',countdownHeading:'Тойымызға дейін қалды',countdownAria:'Тойға дейінгі уақыт',days:'күн',hours:'сағат',minutes:'минут',seconds:'секунд',withLove:'Сүйіспеншілікпен,',metaTitle:'Үйлену тойына шақыру',metaDescription:'Үйлену тойына шақыру',calendar:'Күнтізбе',weddingDay:'той күні'};
 
 const MONTHS = {
   ru: {
@@ -63,7 +64,8 @@ const MONTHS = {
     genitive: ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'],
     weekdaysShort: ['Дш','Шш','Шр','Бш','Жм','Иш','Жк'],
     weekdaysLong: ['Жекшемби','Дүйшөмбү','Шейшемби','Шаршемби','Бейшемби','Жума','Ишемби']
-  }
+  },
+  kk:{nominative:['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым','Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'],genitive:['қаңтар','ақпан','наурыз','сәуір','мамыр','маусым','шілде','тамыз','қыркүйек','қазан','қараша','желтоқсан'],weekdaysShort:['Дс','Сс','Ср','Бс','Жм','Сб','Жс'],weekdaysLong:['Жексенбі','Дүйсенбі','Сейсенбі','Сәрсенбі','Бейсенбі','Жұма','Сенбі']}
 };
 
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -71,7 +73,7 @@ const defaultId = Number(document.querySelector('meta[name="invitation-default-i
 const savedLanguage = (() => { try { return localStorage.getItem('invitation-language'); } catch { return null; } })();
 const state = {
   id: resolveInvitationId(location.pathname, defaultId),
-  language: savedLanguage === 'ky' ? 'ky' : 'ru',
+  language: ['ru','ky','kk'].includes(savedLanguage)?savedLanguage:'ru',
   invitation: null,
   raw: null,
   source: 'loading',
@@ -85,15 +87,15 @@ const state = {
 const elements = {
   cloudIntro: document.querySelector('#cloudIntro'), cloudIntroVideos: [...document.querySelectorAll('.cloud-intro-panel')],
   dataStatus: document.querySelector('#dataStatus'),
+  storyKicker:document.querySelector('.story-kicker'),storyCopy:document.querySelector('.story-copy'),wishBlock:document.querySelector('#wishBlock'),wishBlockTitle:document.querySelector('#wishBlockTitle'),wishBlockText:document.querySelector('#wishBlockText'),
   groomName: document.querySelector('#groomName'), brideName: document.querySelector('#brideName'), heroNames: document.querySelector('#heroNames'),
   heroDateTime: document.querySelector('#heroDateTime'), heroDay: document.querySelector('#heroDay'), heroMonth: document.querySelector('#heroMonth'), heroYear: document.querySelector('#heroYear'),
   calendar: document.querySelector('#calendar'), calendarDayLarge: document.querySelector('#calendarDayLarge'), calendarHeadingMonth: document.querySelector('#calendarHeadingMonth'), calendarYear: document.querySelector('#calendarYear'), calendarMonth: document.querySelector('#calendarMonth'), calendarWeek: document.querySelector('#calendarWeek'), calendarDays: document.querySelector('#calendarDays'), calendarWeekday: document.querySelector('#calendarWeekday'), weddingTime: document.querySelector('#weddingTime'),
   programTimeline: document.querySelector('#programTimeline'), fallingFlower: document.querySelector('#fallingFlower'),
-  venueType: document.querySelector('#venueType'), venueName: document.querySelector('#venueName'), venueAddress: document.querySelector('#venueAddress'), googleMapsLink: document.querySelector('#googleMapsLink'), twoGisLink: document.querySelector('#twoGisLink'),
+  venueType: document.querySelector('#venueType'), venueName: document.querySelector('#venueName'), venueAddress: document.querySelector('#venueAddress'), venueActions:document.querySelector('.venue-actions'),googleMapsLink: document.querySelector('#googleMapsLink'), twoGisLink: document.querySelector('#twoGisLink'),
   rsvpForm: document.querySelector('#rsvpForm'), rsvpSubmit: document.querySelector('#rsvpSubmit'), rsvpSubmitText: document.querySelector('#rsvpSubmit span'), rsvpStatus: document.querySelector('#rsvpStatus'),
-  guestName: document.querySelector('#guestName'), guestCount: document.querySelector('#guestCount'), guestWish: document.querySelector('#guestWish'), openGuestSheet: document.querySelector('#openGuestSheet'),
-  guestSheetBackdrop: document.querySelector('#guestSheetBackdrop'), guestSheet: document.querySelector('#guestSheet'), closeGuestSheet: document.querySelector('#closeGuestSheet'), guestSheetList: document.querySelector('#guestSheetList'),
-  countdownDays: document.querySelector('#countdownDays'), countdownHours: document.querySelector('#countdownHours'), countdownMinutes: document.querySelector('#countdownMinutes'), countdownSeconds: document.querySelector('#countdownSeconds'), countdownNames: document.querySelector('#countdownNames')
+  guestName: document.querySelector('#guestName'), guestCount: document.querySelector('#guestCount'), guestWish: document.querySelector('#guestWish'),
+  countdownDays: document.querySelector('#countdownDays'), countdownHours: document.querySelector('#countdownHours'), countdownMinutes: document.querySelector('#countdownMinutes'), countdownSeconds: document.querySelector('#countdownSeconds'), countdownNames: document.querySelector('#countdownNames'),musicToggle:document.querySelector('#musicToggle'),backgroundMusic:document.querySelector('#backgroundMusic'),guestWishField:document.querySelector('#guestWishField'),rsvpSection:document.querySelector('#rsvp')
 };
 
 function activateHeroMedia() {
@@ -257,6 +259,7 @@ function clearDataStatus() {
 function guestCountLabel(count) {
   const number = Math.max(1, Number(count) || 1);
   if (state.language === 'ky') return `${number} конок`;
+  if (state.language === 'kk') return `${number} қонақ`;
   const mod10 = number % 10;
   const mod100 = number % 100;
   const word = mod10 === 1 && mod100 !== 11 ? 'гость' : mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14) ? 'гостя' : 'гостей';
@@ -264,7 +267,7 @@ function guestCountLabel(count) {
 }
 
 function applyStaticTranslations() {
-  document.documentElement.lang = state.language === 'ky' ? 'ky' : 'ru';
+  document.documentElement.lang = state.language;
   document.querySelectorAll('[data-i18n]').forEach((node) => { node.textContent = translate(node.dataset.i18n); });
   document.querySelectorAll('[data-i18n-placeholder]').forEach((node) => { node.placeholder = translate(node.dataset.i18nPlaceholder); });
   document.querySelectorAll('[data-i18n-aria]').forEach((node) => { node.setAttribute('aria-label', translate(node.dataset.i18nAria)); });
@@ -353,17 +356,14 @@ function renderProgram(invitation) {
   requestFlowerFrame();
 }
 
-function localizeVenueType(value) {
-  if (state.language !== 'ky') return value;
-  const known = { 'Банкетный зал': 'Банкеттик зал', 'Ресторан': 'Ресторан' };
-  return known[value] || value;
-}
-
 function renderVenue(invitation) {
-  elements.venueType.textContent = localizeVenueType(invitation.venue.type);
-  elements.venueName.textContent = invitation.venue.name;
-  elements.venueAddress.textContent = invitation.venue.address;
+  const venue=invitation.venue.content[state.language]||invitation.venue.content[invitation.languages.default]||invitation.venue.content.ru;
+  elements.venueType.textContent = venue.type;
+  elements.venueName.textContent = venue.name;
+  elements.venueAddress.textContent = venue.address;
   const links = buildMapLinks(invitation.venue);
+  elements.venueActions.hidden=!links.enabled;
+  elements.googleMapsLink.hidden=!links.google;elements.twoGisLink.hidden=!links.twoGis;
   elements.googleMapsLink.href = links.google;
   elements.twoGisLink.href = links.twoGis;
 }
@@ -380,44 +380,23 @@ function renderInvitation(invitation) {
   elements.groomName.textContent = invitation.names.groom;
   elements.brideName.textContent = invitation.names.bride;
   elements.countdownNames.textContent = `${invitation.names.groom} ${translate('and')} ${invitation.names.bride}`;
+  const invite=invitation.invitation[state.language]||invitation.invitation[invitation.languages.default]||invitation.invitation.ru||{};
+  elements.storyKicker.textContent=invite.title||translate('storyKicker');elements.storyCopy.textContent=invite.text||translate('storyCopy');
+  const wish=invitation.wishBlock.content[state.language]||invitation.wishBlock.content[invitation.languages.default]||{};elements.wishBlock.hidden=!invitation.wishBlock.enabled;if(!elements.wishBlock.hidden){elements.wishBlockTitle.textContent=wish.title||'';elements.wishBlockText.textContent=wish.text||''}
+  elements.rsvpSection.hidden=!invitation.rsvp.enabled;elements.guestWishField.hidden=!invitation.rsvp.allowGuestWish;configureGuestCount(invitation.rsvp.maxGuests);configureMusic(invitation.music);
   renderDate(invitation);
   renderProgram(invitation);
   renderVenue(invitation);
   renderMetadata(invitation);
-  renderGuestList();
   updateCountdown();
 }
 
-function createElement(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  return node;
-}
-
-function renderGuestList() {
-  if (!elements.guestSheetList) return;
-  const guests = state.invitation?.guests || [];
-  if (!guests.length) {
-    elements.guestSheetList.replaceChildren(createElement('p', 'guest-sheet-empty', translate('emptyGuests')));
-    return;
-  }
-  const cards = guests.map((guest) => {
-    const card = createElement('article', 'guest-card');
-    const top = createElement('div', 'guest-card-top');
-    top.append(createElement('h3', '', guest.name));
-    const status = createElement('span', guest.isAttending ? 'is-attending' : 'is-not-attending', guest.isAttending ? translate('attending') : translate('notAttending'));
-    top.append(status);
-    const count = createElement('p', 'guest-card-count', guestCountLabel(guest.guestsCount));
-    card.append(top, count);
-    if (guest.wish) card.append(createElement('p', 'guest-card-wish', guest.wish));
-    return card;
-  });
-  elements.guestSheetList.replaceChildren(...cards);
-}
+function configureGuestCount(max){elements.guestCount.replaceChildren(...Array.from({length:max},(_,index)=>{const option=document.createElement('option');option.value=String(index+1);option.dataset.count=String(index+1);option.textContent=guestCountLabel(index+1);return option}))}
+function configureMusic(music={}){elements.musicToggle.hidden=!(music.enabled&&music.url);if(elements.musicToggle.hidden){elements.backgroundMusic.pause();return}const url=new URL(music.url,location.href).href;if(elements.backgroundMusic.src!==url)elements.backgroundMusic.src=music.url;elements.backgroundMusic.volume=Math.max(0,Math.min(1,Number(music.volume)||.6))}
 
 function setLanguage(language, persist = true) {
-  if (!['ru', 'ky'].includes(language)) return;
+  if (!state.invitation?.languages.enabled.includes(language)&&state.invitation) return;
+  if (!['ru', 'ky','kk'].includes(language)) return;
   state.language = language;
   if (persist) { try { localStorage.setItem('invitation-language', language); } catch {} }
   applyStaticTranslations();
@@ -471,28 +450,6 @@ function updateCountdown() {
 }
 setInterval(updateCountdown, 1000);
 
-function openGuestSheet() {
-  state.lastFocus = document.activeElement;
-  renderGuestList();
-  elements.guestSheetBackdrop.hidden = false;
-  document.body.classList.add('sheet-open');
-  requestAnimationFrame(() => elements.guestSheetBackdrop.classList.add('is-open'));
-  elements.openGuestSheet.setAttribute('aria-expanded', 'true');
-  setTimeout(() => elements.closeGuestSheet.focus(), 180);
-}
-
-function closeGuestSheet() {
-  elements.guestSheetBackdrop.classList.remove('is-open');
-  document.body.classList.remove('sheet-open');
-  elements.openGuestSheet.setAttribute('aria-expanded', 'false');
-  setTimeout(() => { elements.guestSheetBackdrop.hidden = true; state.lastFocus?.focus?.(); }, reducedMotion ? 0 : 320);
-}
-
-elements.openGuestSheet.addEventListener('click', openGuestSheet);
-elements.closeGuestSheet.addEventListener('click', closeGuestSheet);
-elements.guestSheetBackdrop.addEventListener('click', (event) => { if (event.target === elements.guestSheetBackdrop) closeGuestSheet(); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && !elements.guestSheetBackdrop.hidden) closeGuestSheet(); });
-
 elements.rsvpForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (state.isSubmitting || !elements.rsvpForm.reportValidity()) return;
@@ -511,7 +468,6 @@ elements.rsvpForm.addEventListener('submit', async (event) => {
     const result = await appendGuestToInvitation(state.id, guest);
     state.raw = result.raw;
     state.invitation = result.invitation;
-    renderGuestList();
     state.rsvpStatusKey = 'submitSuccess';
     elements.rsvpStatus.textContent = translate(state.rsvpStatusKey);
     elements.rsvpForm.reset();
@@ -548,10 +504,11 @@ async function loadInvitation() {
     }
   }
   document.body.dataset.dataSource = state.source;
-  renderInvitation(normalizeInvitation(state.raw, state.id));
+  const invitation=normalizeInvitation(state.raw,state.id);const enabled=invitation.languages.enabled;if(!enabled.includes(state.language))state.language=invitation.languages.default;document.querySelectorAll('[data-language]').forEach(button=>button.hidden=!enabled.includes(button.dataset.language));document.querySelector('.language-switcher').hidden=enabled.length<2;applyStaticTranslations();renderInvitation(invitation);
 }
 
-setupCloudIntro();
+elements.musicToggle.addEventListener('click',async()=>{if(elements.backgroundMusic.paused){try{await elements.backgroundMusic.play()}catch{}}else elements.backgroundMusic.pause();elements.musicToggle.classList.toggle('is-playing',!elements.backgroundMusic.paused)});
+document.body.classList.add('site-ready');activateHeroMedia();setupDeferredImages();setupDeferredBackgrounds();
 applyStaticTranslations();
 prepareReveal();
 requestFlowerFrame();

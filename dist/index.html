@@ -4,25 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#F4EBDD">
-  <meta name="invitation-default-id" content="4">
+  <meta name="invitation-default-id" content="1">
   <meta name="description" content="Свадебное приглашение среди облаков">
   <link rel="icon" href="data:,">
   <title>Свадебное приглашение</title>
-  <link rel="preload" as="image" href="assets/intro-clouds-640.webp" type="image/webp" media="(max-width: 700px)">
-  <link rel="preload" as="image" href="assets/intro-clouds.webp" type="image/webp" media="(min-width: 701px)">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="cloud-intro" id="cloudIntro" role="button" tabindex="0" aria-label="Открыть приглашение">
-    <picture class="cloud-intro-poster" aria-hidden="true">
-      <source media="(max-width: 700px)" srcset="assets/intro-clouds-640.webp">
-      <img src="assets/intro-clouds.webp" width="941" height="1671" alt="" fetchpriority="high">
-    </picture>
-    <video class="cloud-intro-panel" muted playsinline preload="none" data-src="assets/intro-clouds.mp4" aria-hidden="true"></video>
-    <span class="cloud-intro-tap-hint" aria-hidden="true"><i></i></span>
-    <span class="screen-reader-only">Открыть приглашение</span>
-  </div>
-
   <span class="font-glyph-probe" aria-hidden="true">ң ө ү Ң Ө Ү</span>
   <div class="data-status" id="dataStatus" role="status" aria-live="polite" hidden></div>
 
@@ -61,6 +49,8 @@
         <p class="story-signature" data-i18n="storySignature">С любовью, наши семьи</p>
       </div>
     </section>
+
+    <section class="story api-wish-block" id="wishBlock" hidden><div class="story-inner reveal"><p class="story-kicker">♡</p><h2 id="wishBlockTitle"></h2><div class="story-ornament" aria-hidden="true"><i></i><span>✦</span><i></i></div><p class="story-copy" id="wishBlockText"></p></div></section>
 
     <section class="calendar-section deferred-background" id="date" data-background-image="assets/calendar-hall.webp">
       <div class="calendar-shade" aria-hidden="true"></div>
@@ -131,10 +121,9 @@
             <label class="rsvp-choice"><input type="radio" name="attending" value="no"><span><i></i><b data-i18n="willNotAttend">К сожалению, не смогу</b></span></label>
           </fieldset>
           <label class="rsvp-field"><span data-i18n="guestCount">Количество гостей</span><select id="guestCount" name="guestCount"><option value="1" data-count="1">1 гость</option><option value="2" data-count="2">2 гостя</option><option value="3" data-count="3">3 гостя</option><option value="4" data-count="4">4 гостя</option><option value="5" data-count="5">5 гостей</option></select></label>
-          <label class="rsvp-field"><span data-i18n="wishLabel">Пожелание молодожёнам</span><textarea id="guestWish" name="guestWish" rows="3" maxlength="600" data-i18n-placeholder="wishPlaceholder" placeholder="Несколько тёплых слов…"></textarea></label>
+          <label class="rsvp-field" id="guestWishField"><span data-i18n="wishLabel">Пожелание молодожёнам</span><textarea id="guestWish" name="guestWish" rows="3" maxlength="600" data-i18n-placeholder="wishPlaceholder" placeholder="Несколько тёплых слов…"></textarea></label>
           <button class="rsvp-submit" id="rsvpSubmit" type="submit"><span data-i18n="sendAnswer">Отправить ответ</span><b>→</b></button>
           <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite"></p>
-          <div class="guest-list-preview"><button id="openGuestSheet" type="button" aria-haspopup="dialog"><span data-i18n="guestList">Список гостей</span><b>↗</b></button></div>
         </form>
       </div>
     </section>
@@ -153,15 +142,8 @@
     </section>
   </main>
 
-  <div class="language-switcher" role="group" data-i18n-aria="languageChoice" aria-label="Выбор языка"><button type="button" data-language="ru" aria-pressed="true">RU</button><i></i><button type="button" data-language="ky" aria-pressed="false">KG</button></div>
-
-  <div class="guest-sheet-backdrop" id="guestSheetBackdrop" hidden>
-    <section class="guest-sheet" id="guestSheet" role="dialog" aria-modal="true" aria-labelledby="guestSheetTitle">
-      <div class="guest-sheet-handle" aria-hidden="true"></div>
-      <header><div><p data-i18n="responsesLabel">Ответы гостей</p><h2 id="guestSheetTitle" data-i18n="guestList">Список гостей</h2></div><button class="guest-sheet-close" id="closeGuestSheet" type="button" data-i18n-aria="close" aria-label="Закрыть">×</button></header>
-      <div class="guest-sheet-list" id="guestSheetList"></div>
-    </section>
-  </div>
+  <div class="language-switcher" role="group" data-i18n-aria="languageChoice" aria-label="Выбор языка"><button type="button" data-language="ru" aria-pressed="true">RU</button><i></i><button type="button" data-language="ky" aria-pressed="false">KG</button><i></i><button type="button" data-language="kk" aria-pressed="false">KZ</button></div>
+  <button class="api-music-toggle" id="musicToggle" type="button" hidden aria-label="Музыка">♫</button><audio id="backgroundMusic" preload="none" loop></audio>
 
   <script type="module" src="app.js"></script>
 </body>

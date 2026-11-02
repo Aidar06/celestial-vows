@@ -470,3 +470,4 @@ html[lang="ky"] :is(.hero-names,.story-inner h2 em,.story-signature,.calendar-ca
   .reveal{opacity:1;transform:none;transition:none}
   .falling-flower{display:none}
 }
+.api-music-toggle{position:fixed;z-index:92;left:18px;bottom:18px;width:44px;height:44px;border:1px solid #a9907355;border-radius:50%;background:#fffaf2dd;color:#8d7358;font-size:19px;backdrop-filter:blur(10px)}.api-music-toggle.is-playing{color:#c69e68}.api-wish-block{min-height:460px;display:grid;place-items:center}.api-wish-block[hidden]{display:none}
