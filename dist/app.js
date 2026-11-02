@@ -362,7 +362,7 @@ function renderVenue(invitation) {
   elements.venueType.textContent = venue.type;
   elements.venueName.textContent = venue.name;
   elements.venueAddress.textContent = venue.address;
-  const links = buildMapLinks(invitation.venue);
+  const links = buildMapLinks(invitation.venue,state.language,invitation.languages.default);
   elements.venueActions.hidden=!links.enabled;
   elements.googleMapsLink.hidden=!links.google;elements.twoGisLink.hidden=!links.twoGis;
   elements.googleMapsLink.href = links.google;
