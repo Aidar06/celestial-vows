@@ -8,7 +8,7 @@ import {
   normalizeInvitation,
   resolveInvitationId,
   sanitizeText
-} from './backend-adapter.js?v=3';
+} from './backend-adapter.js?v=4';
 
 const UI = {
   ru: {
@@ -24,8 +24,7 @@ const UI = {
     willAttend: 'С радостью приду', willNotAttend: 'К сожалению, не смогу', guestCount: 'Количество гостей',
     wishLabel: 'Пожелание молодожёнам', wishPlaceholder: 'Несколько тёплых слов…', sendAnswer: 'Отправить ответ',
     sending: 'Отправляем…', submitSuccess: 'Спасибо! Ваш ответ успешно отправлен.', submitError: 'Не удалось отправить ответ. Проверьте соединение и попробуйте ещё раз.',
-    guestList: 'Список гостей', responsesLabel: 'Ответы гостей', close: 'Закрыть', attending: 'Будет', notAttending: 'Не сможет',
-    emptyGuests: 'Пока здесь нет ответов гостей.', languageChoice: 'Выбор языка',
+    languageChoice: 'Выбор языка',
     countdownHeading: 'До нашей свадьбы осталось', countdownAria: 'Обратный отсчёт до свадьбы', days: 'дней', hours: 'часов', minutes: 'минут', seconds: 'секунд', withLove: 'С любовью,',
     loading: 'Загружаем приглашение…', fallback: 'Не удалось связаться с сервером. Показаны резервные данные.', fatal: 'Не удалось загрузить данные приглашения.',
     metaTitle: 'Свадебное приглашение', metaDescription: 'Свадебное приглашение', calendar: 'Календарь', weddingDay: 'день свадьбы'
@@ -43,8 +42,7 @@ const UI = {
     willAttend: 'Кубануу менен келем', willNotAttend: 'Тилекке каршы, келе албайм', guestCount: 'Коноктордун саны',
     wishLabel: 'Жаш жубайларга каалоо', wishPlaceholder: 'Бир нече жылуу сөз…', sendAnswer: 'Жоопту жөнөтүү',
     sending: 'Жөнөтүлүүдө…', submitSuccess: 'Рахмат! Жообуңуз ийгиликтүү жөнөтүлдү.', submitError: 'Жооп жөнөтүлгөн жок. Байланышты текшерип, кайра аракет кылыңыз.',
-    guestList: 'Коноктордун тизмеси', responsesLabel: 'Коноктордун жооптору', close: 'Жабуу', attending: 'Келет', notAttending: 'Келе албайт',
-    emptyGuests: 'Азырынча коноктордон жооп жок.', languageChoice: 'Тилди тандоо',
+    languageChoice: 'Тилди тандоо',
     countdownHeading: 'Үйлөнүү тоюбузга калды', countdownAria: 'Үйлөнүү тоюна чейинки убакыт', days: 'күн', hours: 'саат', minutes: 'мүнөт', seconds: 'секунд', withLove: 'Сүйүү менен,',
     loading: 'Чакыруу жүктөлүүдө…', fallback: 'Сервер менен байланыш болгон жок. Камдык маалымат көрсөтүлдү.', fatal: 'Чакыруу маалыматы жүктөлгөн жок.',
     metaTitle: 'Үйлөнүү тоюна чакыруу', metaDescription: 'Үйлөнүү тоюна чакыруу', calendar: 'Жылнаама', weddingDay: 'үйлөнүү күнү'
@@ -80,12 +78,10 @@ const state = {
   isSubmitting: false,
   statusKey: 'loading',
   statusType: 'loading',
-  rsvpStatusKey: '',
-  lastFocus: null
+  rsvpStatusKey: ''
 };
 
 const elements = {
-  cloudIntro: document.querySelector('#cloudIntro'), cloudIntroVideos: [...document.querySelectorAll('.cloud-intro-panel')],
   dataStatus: document.querySelector('#dataStatus'),
   storyKicker:document.querySelector('.story-kicker'),storyCopy:document.querySelector('.story-copy'),wishBlock:document.querySelector('#wishBlock'),wishBlockTitle:document.querySelector('#wishBlockTitle'),wishBlockText:document.querySelector('#wishBlockText'),
   groomName: document.querySelector('#groomName'), brideName: document.querySelector('#brideName'), heroNames: document.querySelector('#heroNames'),
@@ -153,87 +149,6 @@ function setupDeferredImages() {
     });
   }, { rootMargin: '500px 0px' });
   nodes.forEach((node) => observer.observe(node));
-}
-
-function setupCloudIntro() {
-  const intro = elements.cloudIntro;
-  if (!intro) return;
-  document.body.classList.add('intro-locked');
-  let opening = false;
-  const timers = new Set();
-  const later = (callback, delay) => {
-    const timer = window.setTimeout(() => {
-      timers.delete(timer);
-      callback();
-    }, delay);
-    timers.add(timer);
-    return timer;
-  };
-  const hintTimer = later(() => intro.classList.add('has-tap-hint'), 4000);
-
-  const releaseVideo = (video) => {
-    video.pause();
-    video.removeAttribute('src');
-    video.load();
-    video.remove();
-  };
-
-  const finish = () => {
-    timers.forEach(window.clearTimeout);
-    timers.clear();
-    intro.classList.add('is-finished');
-    document.body.classList.remove('intro-locked');
-    elements.cloudIntroVideos.forEach(releaseVideo);
-  };
-
-  const startFadeSequence = () => {
-    if (intro.dataset.sequenceStarted === 'true') return;
-    intro.dataset.sequenceStarted = 'true';
-    intro.classList.add('is-playing');
-    later(() => intro.classList.add('is-fading'), 3000);
-    later(finish, 5050);
-  };
-
-  const gracefulFallback = () => {
-    intro.classList.add('is-fading');
-    later(finish, reducedMotion ? 280 : 2050);
-  };
-
-  const open = () => {
-    if (opening) return;
-    opening = true;
-    window.clearTimeout(hintTimer);
-    timers.delete(hintTimer);
-    intro.classList.remove('has-tap-hint');
-    intro.classList.add('is-opening');
-    intro.setAttribute('aria-hidden', 'true');
-    document.body.classList.add('site-ready');
-    activateHeroMedia();
-    setupDeferredImages();
-    setupDeferredBackgrounds();
-    if (reducedMotion) {
-      intro.classList.add('is-fading');
-      later(finish, 280);
-      return;
-    }
-    const video = elements.cloudIntroVideos[0];
-    if (!video?.dataset.src) {
-      gracefulFallback();
-      return;
-    }
-    video.addEventListener('playing', startFadeSequence, { once: true });
-    video.addEventListener('error', gracefulFallback, { once: true });
-    video.src = video.dataset.src;
-    video.currentTime = 0;
-    video.play().catch(gracefulFallback);
-  };
-
-  intro.addEventListener('click', open, { once: true });
-  intro.addEventListener('keydown', (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    event.preventDefault();
-    open();
-  });
 }
 
 function translate(key) { return UI[state.language][key] || UI.ru[key] || key; }
@@ -350,8 +265,8 @@ function renderProgram(invitation) {
     const time = article.querySelector('time');
     time.textContent = ceremony.time;
     time.dateTime = ceremony.time;
-    article.querySelector('h3').textContent = ceremony.title[language] || ceremony.title.ru;
-    article.querySelector('p').textContent = ceremony.text[language] || ceremony.text.ru;
+    article.querySelector('h3').textContent = ceremony.title[language] || ceremony.title[invitation.languages.default] || ceremony.title.ru || '';
+    article.querySelector('p').textContent = ceremony.text[language] || ceremony.text[invitation.languages.default] || ceremony.text.ru || '';
   });
   prepareReveal(elements.programTimeline);
   requestFlowerFrame();
@@ -506,7 +421,13 @@ async function loadInvitation() {
     }
   }
   document.body.dataset.dataSource = state.source;
-  const invitation=normalizeInvitation(state.raw,state.id);const enabled=invitation.languages.enabled;if(!enabled.includes(state.language))state.language=invitation.languages.default;document.querySelectorAll('[data-language]').forEach(button=>button.hidden=!enabled.includes(button.dataset.language));document.querySelector('.language-menu').hidden=enabled.length<2;applyStaticTranslations();renderInvitation(invitation);
+  const invitation = normalizeInvitation(state.raw, state.id);
+  const enabled = invitation.languages.enabled;
+  state.language = savedLanguage && enabled.includes(savedLanguage) ? savedLanguage : invitation.languages.default;
+  document.querySelectorAll('[data-language]').forEach((button) => { button.hidden = !enabled.includes(button.dataset.language); });
+  document.querySelector('.language-menu').hidden = enabled.length < 2;
+  applyStaticTranslations();
+  renderInvitation(invitation);
 }
 
 document.body.classList.add('site-ready');activateHeroMedia();setupDeferredImages();setupDeferredBackgrounds();
