@@ -8,7 +8,7 @@ import {
   normalizeInvitation,
   resolveInvitationId,
   sanitizeText
-} from './backend-adapter.js';
+} from './backend-adapter.js?v=3';
 
 const UI = {
   ru: {
