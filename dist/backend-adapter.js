@@ -15,9 +15,9 @@ export function sanitizeText(value, maxLength = 600) {
 
 export function resolveInvitationId(pathname, defaultId = DEFAULT_INVITATION_ID) {
   const firstSegment = String(pathname || '').split('/').filter(Boolean)[0];
-  if (!firstSegment) return defaultId;
-  const id = Number(firstSegment);
-  return Number.isSafeInteger(id) && id > 0 ? id : defaultId;
+  if (!firstSegment) return String(defaultId);
+  const publicId = decodeURIComponent(firstSegment).trim();
+  return /^[A-Za-z0-9_-]{1,128}$/.test(publicId) ? publicId : null;
 }
 
 export function withBishkekOffset(value) {
@@ -48,7 +48,7 @@ function normalizeGuest(guest = {}) {
 }
 
 export function normalizeInvitation(raw = {}, fallbackId = DEFAULT_INVITATION_ID) {
-  const id = Number(raw.id) || fallbackId;
+  const id = String(raw.public_id ?? fallbackId);
   const names = raw.names || {};
   const enabled = [...new Set((raw.languages?.enabled || ['ru']).filter((language) => SUPPORTED_LANGUAGES.includes(language)))];
   if (!enabled.length) enabled.push('ru');
@@ -160,7 +160,6 @@ export function buildPatchPayload(raw = {}, guest = {}, fallbackId = DEFAULT_INV
     console.warn('Backend response does not include guests; previous guest responses cannot be preserved.');
   }
   return {
-    id: Number(raw.id) || fallbackId,
     languages: raw.languages,
     names: raw.names,
     date: raw.date,
@@ -179,7 +178,7 @@ async function readJson(response) {
 }
 
 export async function fetchInvitationRaw(id, { fetchImpl = fetch, signal } = {}) {
-  const response = await fetchImpl(`${API_BASE_URL}/${Number(id)}`, {
+  const response = await fetchImpl(`${API_BASE_URL}/${encodeURIComponent(String(id))}`, {
     headers: { Accept: 'application/json' },
     cache: 'no-store',
     signal
@@ -201,7 +200,7 @@ export async function fetchFallbackRaw(id, { fetchImpl = fetch, url = './content
 export async function appendGuestToInvitation(id, guest, { fetchImpl = fetch } = {}) {
   const latest = await fetchInvitationRaw(id, { fetchImpl });
   const payload = buildPatchPayload(latest, guest, id);
-  const response = await fetchImpl(`${API_BASE_URL}/${Number(id)}/full`, {
+  const response = await fetchImpl(`${API_BASE_URL}/${encodeURIComponent(String(id))}/full`, {
     method: 'PATCH',
     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
