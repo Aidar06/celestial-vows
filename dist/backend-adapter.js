@@ -78,7 +78,8 @@ export function normalizeInvitation(raw = {}, fallbackId = DEFAULT_INVITATION_ID
     };
   }
 
-  const ceremonies = [...(Array.isArray(raw.ceremonies) ? raw.ceremonies : [])]
+  const ceremonyItems = Array.isArray(raw.ceremonies) ? raw.ceremonies : raw.ceremonies && typeof raw.ceremonies === "object" ? Object.values(raw.ceremonies) : [];
+  const ceremonies = [...ceremonyItems]
     .sort((left, right) => (Number(left.sort_order) || 0) - (Number(right.sort_order) || 0))
     .map((item) => {
       const title = {};
